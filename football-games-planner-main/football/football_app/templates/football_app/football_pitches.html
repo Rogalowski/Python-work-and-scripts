@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Football pitches{% endblock %}
+{% block content %}
+    {% include 'carousele.html' %}
+
+    <div class="container ct-margin-top">
+        <h2 class="text-center">BEST FOOTBALL PITCHES</h2>
+    </div>
+
+    <div class="container ct-margin-top">
+        <div class="row">
+            {% include 'football_pitches_top_3.html' %}
+
+            <div class="container ct-margin-top">
+                <h2>Football pitches ranking</h2>
+            </div>
+
+            <div class="container ct-margin-top">
+                {% if object_list %}
+                    <table class="table table-hover ">
+                        <thead>
+                        <tr>
+                            <th>Football Pitch</th>
+                            <th>Address</th>
+                            <th>Positive comments %</th>
+                            <th>Details</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for football_pitch_top in page_obj %}
+                            <tr>
+                                <td>{{ football_pitch_top.name }}</td>
+                                <td>{{ football_pitch_top.city }}, {{ football_pitch_top.street }}</td>
+                                <td style="color: #044304">{{ football_pitch_top.rating }} %</td>
+                                <td><a class="txtlink" href="{% url 'football_pitch_details' football_pitch_top.pk %}">Pitch
+                                    details</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="pager ct-margin-top">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page=1">&laquo; first</a></li>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
+                            <li><a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a></li>
+                        {% endif %}
+                    </span>
+                    </div>
+                    </div>
+                {% else %}
+                    <h3>No games yet</h3>
+                {% endif %}
+        </div>
+    </div>
+    <div class="ct-margin-top"></div>
+
+{% endblock %}

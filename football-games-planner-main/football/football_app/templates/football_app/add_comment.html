@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Comment football pitch{% endblock %}
+{% block content %}
+    {% include 'carousele.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 ct-margin-top"></div>
+            <div class="col-sm-6 ct-margin-top">
+                <h1>COMMENT FOOTBALL PITCH</h1>
+                {% if reservation.user == user %}
+                    <div class="form-group ct-margin-top">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <br>
+                            <input class="btn btn-secondary" type="submit" value="Add Comment">
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        You're not allowed here!
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+
+{% endblock %}

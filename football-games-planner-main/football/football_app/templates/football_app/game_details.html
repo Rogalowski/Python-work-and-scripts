@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ game.football_pitch.name }} - {{ game.date|date:"d M y" }}{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2 sidenav ct-margin-top">
+                <h4><span class="glyphicon glyphicon-bell"></span> Game added by {{ game.created_by }}</h4>
+                <h5>{% if game.level == 1 %}
+                    <span class="label label-success">{{ game.get_level_display }}</span>
+                {% elif game.level == 2 %}
+                    <span class="label label-info">{{ game.get_level_display }}</span>
+                {% elif game.level == 3 %}
+                    <span class="label label-warning">{{ game.get_level_display }}</span>
+                {% elif game.level == 4 %}
+                    <span class="label label-danger">{{ game.get_level_display }}</span>
+                {% endif %}
+                    <span class="label label-primary">Player count: {{ game.player_count }}</span>
+                </h5>
+                <hr>
+
+                <h3 class="ct-margin-top">{% if not future_game %}
+                    <small style="color: red">PAST GAME - RESERVATION NOT POSSIBLE</small>
+                {% elif game.player_age_from > user_age or user_age > game.player_age_to %}
+                    <small style="color: red">YOU ARE NOT IN AGE RANGE</small>
+                {% elif reservations_count == game.player_count and existing_user_reservation %}
+                    <small style="color: #044304">YOU ALREADY HAVE A RESERVATION FOR THIS GAME!!</small>
+                {% elif reservations_count == game.player_count %}
+                    <small style="color: red">NO POSITIONS AVAILABLE FOR THIS GAME</small>
+                {% elif existing_user_reservation %}
+                    <small style="color: #044304">YOU ALREADY HAVE A RESERVATION FOR THIS GAME!!</small>
+                {% elif not existing_user_reservation %}
+                    <small style="color: #044304">TAKE PART IN A GAME NOW!!</small>
+                {% endif %}
+                </h3>
+                {% if reservations_count == game.player_count or existing_user_reservation or game.player_age_from > user_age or user_age > game.player_age_to %}
+                    <form action="{% url 'add_reservation' %}" method="POST" disabled="True">
+                        <fieldset disabled="disabled">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input class="btn btn-dark" type="submit" value="Join Game">
+                        </fieldset>
+                    </form>
+                {% elif not existing_user_reservation %}
+                    <form action="{% url 'add_reservation' %}" method="POST" disabled="True">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input class="btn btn-primary" type="submit" value="Join Game">
+                    </form>
+                {% endif %}
+
+                <hr>
+                {% if available_positions == 1 %}
+                    <h4 class="ct-margin-top" style="color: darkred">{{ available_positions }} position available</h4>
+                {% else %}
+                    <h4 class="ct-margin-top" style="color: darkred">{{ available_positions }} positions available</h4>
+                {% endif %}
+                <Hr>
+                <h4 style="color: #044304" class="ct-margin-top">Game details</h4>
+                <ul class="list-group">
+                    <li class="list-group-item"><b>Football pitch name:</b><a
+                            href="{% url 'football_pitch_details' game.football_pitch.pk %}">
+                        {{ game.football_pitch.name }}</a>
+                    </li>
+                    <li class="list-group-item"><b>Date:</b> {{ game.date|date:"d M y" }}</li>
+                    <li class="list-group-item"><b>Time:</b> {{ game.date|time }}</li>
+                    <li class="list-group-item"><b>Duration:</b> {{ game.duration }}</li>
+                    <li class="list-group-item"><b>Level:</b> {{ game.get_level_display }}</li>
+                    <li class="list-group-item"><b>Number of players:</b> {{ reservations_count }}
+                        / {{ game.player_count }}</li>
+                    <li class="list-group-item"><b>Age range:</b> {{ game.player_age_from }} - {{ game.player_age_to }}
+                    </li>
+                </ul>
+                <h4 style="color: #044304" class="ct-margin-top">Football pitch details</h4>
+                <ul class="list-group">
+                    <li class="list-group-item"><b>Pitch type:</b> {{ game.football_pitch.get_type_display }}</li>
+                    <li class="list-group-item"><b>Pitch surface:</b> {{ game.football_pitch.get_surface_display }}</li>
+                    <li class="list-group-item"><b>Locker room:</b>
+                        {% if game.football_pitch.locker_room_available == 1 %}
+                            <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-remove" style="color: darkred"></span>
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item"><b>Pitch
+                        address:</b> {{ game.football_pitch.city }}, {{ game.football_pitch.street }}</li>
+                    <li class="list-group-item"><b>Pitch description:</b> {{ game.football_pitch.description }}</li>
+                </ul>
+                {{ now }}
+                {% if game.created_by.id == user.id and future_game %}
+                    <a href="{% url 'delete_game' game.id %}" type="button" class="btn btn-danger">Delete game</a>
+                {% endif %}
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 ct-margin-top">
+
+                <h2 class="ct-margin-top" style="color: #044304">Game {{ game.date|date:"d M y" }} -
+                    {{ game.date|time }} on the {{ game.football_pitch.name }} football pitch.
+                </h2>
+                <h3>PLAYERS SIGNED UP FOR THE GAME </h3>
+                <hr>
+                {% if not game.gamereservation_set.all %}
+                    <h3>No reservations yet</h3>
+                {% else %}
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name (username)</th>
+                            <th>E-mail</th>
+                            <th>Preferred position</th>
+                            <th>Will bring the ball</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for reservation in game.gamereservation_set.all %}
+                            <tr>
+                                <td>{{ reservation.user.first_name }} ({{ reservation.user.username }})</td>
+                                <td>{{ reservation.user.email }}</td>
+                                <td>{{ reservation.get_preferred_position_display }}</td>
+                                {% if reservation.user_has_ball == 1 %}
+                                    <td><span class="glyphicon glyphicon-ok" style="color: green"></span></td>
+                                {% else %}
+                                    <td><span class="glyphicon glyphicon-remove" style="color: darkred"></span></td>
+                                {% endif %}
+                                {% if reservation.user.id == user.id and reservation not in past_reservations %}
+                                    <td><a style="color: #6b0000" href="{% url 'delete_reservation' reservation.id %}">Leave</a>
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+
+                <h3 class="ct-margin-top">
+                    <small><a class="txtlink-2"
+                              href="{% url 'football_pitch_details' game.football_pitch.pk %}">{{ game.football_pitch.name|upper }}</a>
+                        FOOTBALL PITCH COMMENTS</small>
+                </h3>
+                <h5 style="color: #044304">{{ game.football_pitch.rating|upper }}% of positive comments</h5>
+                <hr>
+                <p><span class="badge">{{ game.football_pitch.comments.all.count }}
+                </span> Comments about <b>{{ game.football_pitch.name }}</b> football pitch</p>
+                <p><span class="badge" style="background-color: green">{{ positive_comments.count }} </span> positive
+                    <span class="badge" style="background-color: darkred">{{ negative_comments.count }} </span> negative
+                </p>
+                {% if not game.football_pitch.comments.all %}
+                    <h3>No comments yet</h3>
+                {% else %}
+                    <div style="height: 300px;overflow: scroll;">
+                        {% for comment in  game.football_pitch.comments.all %}
+                            <div class="row">
+                                <div class="col-sm-1 text-center">
+                                    <img src="{% static 'avatar.png' %}" class="img-circle" height="55" width="55"
+                                         alt="Avatar">
+                                </div>
+                                <div class="col-sm-10">
+                                    <h5>{{ comment.user }} <small>{{ comment.date_added }}</small>
+                                        {% if comment.type == 1 %}
+                                            <span class="glyphicon glyphicon-thumbs-up" style="color: green"></span>
+                                        {% else %}
+                                            <span class="glyphicon glyphicon-thumbs-down" style="color: darkred"></span>
+                                        {% endif %}
+                                    </h5>
+                                    <p>{{ comment.description }}</p><br>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

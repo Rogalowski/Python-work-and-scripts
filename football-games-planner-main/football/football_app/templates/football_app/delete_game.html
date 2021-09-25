@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Delete Game{% endblock %}
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 ct-margin-top"></div>
+            <div class="col-sm-6 ct-margin-top">
+                {% if game.created_by == user %}
+                    <h2>DELETE GAME</h2>
+                    <hr>
+                    <h4><b>Footabll pitch:</b> {{ game.football_pitch.name }}</h4>
+                    <h4><b>Game date:</b> {{ game.date }}</h4>
+                    <div class="form-group">
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <br>
+                            <strong>Are you sure?!</strong><br><br>
+                            <input class="btn btn-warning" type="submit" value="Delete game">
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        You're not allowed here!
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+{% for best_football_pitch in best_football_pitches %}
+    <div class="col-sm-6 col-md-4">
+    {% if forloop.counter == 1 %}
+        <div class="thumbnail thumbnail-st">
+    {% elif forloop.counter == 2 %}
+        <div class="thumbnail thumbnail-nd">
+    {% elif forloop.counter == 3 %}
+        <div class="thumbnail thumbnail-th">
+    {% endif %}
+{% if forloop.counter == 1 %}
+    <img class="ct-margin-top" src="{{ STATIC_URL }}{{ forloop.counter }}.png" height="39px"
+         width="39px" alt="count-1">
+{% else %}
+    <img class="ct-margin-top" src="{{ STATIC_URL }}{{ forloop.counter }}.png" height="60px"
+         width="60px" alt="count-2">
+{% endif %}
+<div class="caption">
+    <h4 class="text-center "><b>{{ best_football_pitch.name|upper }}</b></h4>
+    <h4 class="text-center  comments-percent"> {{ best_football_pitch.rating }} %</h4>
+    <h4 class="text-center"> of positive comments</h4>
+    <p class="text-center"><a href="{% url 'football_pitch_details' best_football_pitch.pk %}"
+                              class="btn btn-default btn-sm " role="button">Details</a>
+    </p>
+</div>
+</div>
+</div>
+{% endfor %}

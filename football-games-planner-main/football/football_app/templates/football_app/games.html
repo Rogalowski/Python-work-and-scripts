@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load param_replace %}
+{% block title %}Available Games{% endblock %}
+{% block content %}
+    {% include 'carousele.html' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2 sidenav"><br><br><br><br><br>
+                <h4 style="color: #044304">Filter games</h4>
+                <hr>
+                <div class="form-group">
+                    <form action="{% url 'games' %}" method="GET">
+                        {{ form.as_p }}
+                        <br>
+                        <div class="container-sm">
+                            <div class="row content">
+                                <div class="col-sm-3 sidenav">
+                                    <input class="btn btn-success" type="submit" value="Search">
+                                </div>
+                                <div class="col-sm-3 sidenav">
+                                    <a href="{% url 'games' %}" type="button" class="btn btn-default">Clean filters</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6">
+                <div class="ct-margin-top">
+                    <h3 class="text-left">SEARCH FOR AVAILABLE GAMES</h3>
+                </div>
+                {% if object_list %}
+                    <table class="table table-hover ">
+                        <thead>
+                        <tr>
+                            <br>
+                            <form action="{% url 'games' %}" method="GET">
+                                {% if sort_by == 'football_pitch_asc' %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by"
+                                                value="football_pitch_desc">
+                                            Football pitch <span
+                                                class="glyphicon glyphicon-sort-by-alphabet-alt"></span></button>
+                                    </th>
+                                {% elif sort_by == 'football_pitch_desc' %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by"
+                                                value="football_pitch_asc">
+                                            Football pitch <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                                        </button>
+                                    </th>
+                                {% else %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by"
+                                                value="football_pitch_desc">Football pitch
+                                            <span class="glyphicon glyphicon-sort"></span></button>
+                                        </button>
+                                    </th>
+                                {% endif %}
+                                {% if sort_by == 'date_asc' %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by" value="date_desc">
+                                            Date <span class="glyphicon glyphicon-sort-by-order-alt"></span></button>
+                                    </th>
+                                {% elif sort_by == 'date_desc' %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by" value="date_asc">
+                                            Date <span class="glyphicon glyphicon-sort-by-order"></span></button>
+                                    </th>
+                                {% else %}
+                                    <th>
+                                        <button type="submit" class="btn-link" name="sort_by"
+                                                value="date_desc">Date
+                                            <span class="glyphicon glyphicon-sort"></span></button>
+                                        </button>
+                                    </th>
+                                {% endif %}
+                            </form>
+                            <th>Game Time</th>
+                            <th>Address</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for game in object_list %}
+                            <tr>
+                                <td>{{ game.football_pitch.name }}</td>
+                                <td>{{ game.date|date:"d M y" }}</td>
+                                <td>{{ game.date|time }}</td>
+                                <td>{{ game.football_pitch.city }}, {{ game.football_pitch.street }}</td>
+                                <td><a class="txtlink" href="{% url 'game_details' game.pk %}">Game details</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="pager ct-margin-top">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?{% param_replace page=1 %}">&laquo; first</a></li>
+                            <li><a href="?{% param_replace page=page_obj.previous_page_number %}">previous</a></li>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <li><a href="?{% param_replace page=page_obj.next_page_number %}">next</a></li>
+                            <li><a href="?{% param_replace page=page_obj.paginator.num_pages %}">last &raquo;</a></li>
+                        {% endif %}
+                    </span>
+                    </div>
+                    </div>
+                {% else %}
+                    <h3>No games yet</h3>
+                {% endif %}
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+
+{% endblock %}
