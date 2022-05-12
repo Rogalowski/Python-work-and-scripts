@@ -5,7 +5,7 @@ from faker import Faker
 
 from football_app.models import User
 
-fake = Faker()
+fake = Faker(locale='pl_PL')
 
 
 class Command(BaseCommand):

@@ -113,12 +113,24 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-try:
-    from football.local_settings import DATABASES
-except ModuleNotFoundError:
-    print("No database configuration in local_settings.py file!")
-    print("Set database connection and try again!")
-    exit(0)
+# try:
+#     from football.local_settings import DATABASES
+# except ModuleNotFoundError:
+#     print("No database configuration in local_settings.py file!")
+#     print("Set database connection and try again!")
+#     exit(0)
+
+DATABASES = {
+    'default': {
+        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'football',
+        'USER': 'postgres',
+        'PASSWORD': 'coderslab',
+        'PORT': 5431,
+    }
+}
+
 
 AUTH_USER_MODEL = 'football_app.User'
 

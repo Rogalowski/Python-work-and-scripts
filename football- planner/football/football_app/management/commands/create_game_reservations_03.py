@@ -7,7 +7,7 @@ from faker import Faker
 
 from football_app.models import Comment, Game, GameReservation, User, COMMENT_TYPES, GAME_POSITIONS
 
-fake = Faker()
+fake = Faker(locale='pl_PL')
 
 
 class Command(BaseCommand):

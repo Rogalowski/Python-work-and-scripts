@@ -5,7 +5,7 @@ from faker import Faker
 
 from football_app.models import FootballPitch, FOOTBALL_PITCH_SURFACES, FOOTBALL_PITCH_TYPES
 
-fake = Faker()
+fake = Faker(locale='pl_PL')
 
 
 class Command(BaseCommand):
