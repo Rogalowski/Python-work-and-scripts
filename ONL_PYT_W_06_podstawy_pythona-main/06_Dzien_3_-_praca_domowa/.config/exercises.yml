@@ -1,0 +1,4 @@
+exercises:
+    '1_Random average': { max_points: 0, disabled: true }
+    2_Div: { max_points: 0, disabled: true }
+    3_Pesel: { max_points: 0, disabled: true }

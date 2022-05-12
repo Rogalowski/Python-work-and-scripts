@@ -1,0 +1,3 @@
+exercises:
+    '1_Flask math': { max_points: 0, disabled: true }
+    '2_Flask postcode': { max_points: 0, disabled: true }

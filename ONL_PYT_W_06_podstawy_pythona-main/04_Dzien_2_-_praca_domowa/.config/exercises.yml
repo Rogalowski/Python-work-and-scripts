@@ -1,0 +1,7 @@
+exercises:
+    '1_Make tuple': { max_points: 0, disabled: true }
+    '2_Find first and last': { max_points: 0, disabled: true }
+    '3_Format date': { max_points: 0, disabled: true }
+    '4_Find boundaries': { max_points: 0, disabled: true }
+    5_Censor: { max_points: 0, disabled: true }
+    '6_Check palindrome': { max_points: 0, disabled: true }

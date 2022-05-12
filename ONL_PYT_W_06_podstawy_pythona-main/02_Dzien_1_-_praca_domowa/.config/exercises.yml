@@ -1,0 +1,10 @@
+exercises:
+    0_PEP-8: { max_points: 0, disabled: true }
+    '1_Multiline String': { max_points: 0, disabled: true }
+    '2_Square area': { max_points: 0, disabled: true }
+    '3_Circle circuit': { max_points: 0, disabled: true }
+    '4_Dogs age': { max_points: 0, disabled: true }
+    5_Chessboard: { max_points: 0, disabled: true }
+    '6_Is divided by 4': { max_points: 0, disabled: true }
+    7_Histogram: { max_points: 0, disabled: true }
+    8_Fibonacci: { max_points: 0, disabled: true }
