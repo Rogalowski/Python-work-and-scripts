@@ -1,0 +1,18 @@
+# -*- coding: cp1250 -*-
+import unicodedata
+
+print("Czeœæ")
+
+with open('test.txt', encoding='cp1250') as f:
+    s = f.read()
+with open('test2.txt', "w", encoding='cp1250') as f:
+    f.write(s)
+    f.write("piêæ")
+print(s)
+
+# Transliteracja: Czeœæ --> Czesc
+s = unicodedata.normalize('NFKD', "Czeœæ").encode('ascii', 'ignore')
+print(s.decode('utf-8'))
+# nie dzia³a dla £ i ³ !!!
+s = unicodedata.normalize('NFKD', "£ódŸ").encode('ascii', 'ignore')
+print(s.decode('utf-8'))

@@ -1,0 +1,20 @@
+Wywołania:
+temperature.py init  # tworzy tabelę w bazie danych
+temperature.py add  # dopisuje do bazy aktualną temperaturę odczuwalną
+temperature.py list  # listuje zpisane w bazie temperatury
+
+"""CREATE TABLE `temp` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `time` DATETIME NOT NULL,
+    `temperature` INTEGER NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin
+AUTO_INCREMENT=1 ;"""
+
+"INSERT INTO `temp` (`time`, `temperature`) VALUES (%s, %s)"
+
+"SELECT `id`, `time`, `temperature` FROM `temp`"
+result = cursor.fetchall()
+
+import time
+time.strftime('%Y-%m-%d %H:%M:%S')
