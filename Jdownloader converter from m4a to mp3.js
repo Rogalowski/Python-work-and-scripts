@@ -1,5 +1,5 @@
 // Convert aac/m4a/ogg files to mp3.
-// Trigger required: "A Download Stopped".
+// Trigger required: "A Packet Ended - Pakiet zakończony".
 // Requires ffmpeg/ffprobe. Uses JD ffmpeg/ffprobe settings if available.
 // Overwrites destination file (mp3) if it already exists.
 
